@@ -7,7 +7,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 )
 
 const createProfile = `-- name: CreateProfile :one
@@ -20,12 +19,12 @@ RETURNING id
 `
 
 type CreateProfileParams struct {
-	FirstName string        `json:"first_name"`
-	LastName  string        `json:"last_name"`
-	Email     string        `json:"email"`
-	Age       int32         `json:"age"`
-	Gender    GenderT       `json:"gender"`
-	PlayerID  sql.NullInt64 `json:"player_id"`
+	FirstName string  `json:"first_name"`
+	LastName  string  `json:"last_name"`
+	Email     string  `json:"email"`
+	Age       int32   `json:"age"`
+	Gender    GenderT `json:"gender"`
+	PlayerID  int64   `json:"player_id"`
 }
 
 func (q *Queries) CreateProfile(ctx context.Context, arg CreateProfileParams) (int64, error) {
@@ -52,6 +51,27 @@ func (q *Queries) DeleteProfile(ctx context.Context, id int64) error {
 	return err
 }
 
+const getProfile = `-- name: GetProfile :one
+SELECT id, first_name, last_name, email, age, gender, player_id, updated_at FROM profiles
+WHERE id = $1
+`
+
+func (q *Queries) GetProfile(ctx context.Context, id int64) (Profile, error) {
+	row := q.db.QueryRowContext(ctx, getProfile, id)
+	var i Profile
+	err := row.Scan(
+		&i.ID,
+		&i.FirstName,
+		&i.LastName,
+		&i.Email,
+		&i.Age,
+		&i.Gender,
+		&i.PlayerID,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const playerProfile = `-- name: PlayerProfile :one
 SELECT profiles.id, profiles.first_name, profiles.last_name, profiles.email, profiles.age, profiles.gender, profiles.player_id, profiles.updated_at
 FROM players
@@ -75,7 +95,7 @@ func (q *Queries) PlayerProfile(ctx context.Context, id int64) (Profile, error) 
 	return i, err
 }
 
-const updateProfile = `-- name: UpdateProfile :exec
+const updateProfile = `-- name: UpdateProfile :one
 UPDATE profiles 
   set first_name = $2,
   last_name = $3,
@@ -88,17 +108,17 @@ RETURNING id, first_name, last_name, email, age, gender, player_id, updated_at
 `
 
 type UpdateProfileParams struct {
-	ID        int64         `json:"id"`
-	FirstName string        `json:"first_name"`
-	LastName  string        `json:"last_name"`
-	Email     string        `json:"email"`
-	Age       int32         `json:"age"`
-	Gender    GenderT       `json:"gender"`
-	PlayerID  sql.NullInt64 `json:"player_id"`
+	ID        int64   `json:"id"`
+	FirstName string  `json:"first_name"`
+	LastName  string  `json:"last_name"`
+	Email     string  `json:"email"`
+	Age       int32   `json:"age"`
+	Gender    GenderT `json:"gender"`
+	PlayerID  int64   `json:"player_id"`
 }
 
-func (q *Queries) UpdateProfile(ctx context.Context, arg UpdateProfileParams) error {
-	_, err := q.db.ExecContext(ctx, updateProfile,
+func (q *Queries) UpdateProfile(ctx context.Context, arg UpdateProfileParams) (Profile, error) {
+	row := q.db.QueryRowContext(ctx, updateProfile,
 		arg.ID,
 		arg.FirstName,
 		arg.LastName,
@@ -107,5 +127,16 @@ func (q *Queries) UpdateProfile(ctx context.Context, arg UpdateProfileParams) er
 		arg.Gender,
 		arg.PlayerID,
 	)
-	return err
+	var i Profile
+	err := row.Scan(
+		&i.ID,
+		&i.FirstName,
+		&i.LastName,
+		&i.Email,
+		&i.Age,
+		&i.Gender,
+		&i.PlayerID,
+		&i.UpdatedAt,
+	)
+	return i, err
 }

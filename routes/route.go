@@ -13,10 +13,16 @@ func PlayersRoutes(incomingRoutes *gin.Engine, handler *controllers.Application)
 	incomingRoutes.DELETE("/api/v1/player/:id", handler.DeletePlayer())
 }
 
+func ProfileRoutes(incomingRoutes *gin.Engine, handler *controllers.Application) {
+	incomingRoutes.POST("/api/v1/player/:id/profile", handler.CreateProfile())
+	incomingRoutes.GET("/api/v1/player/:id/profile", handler.GetPlayerProfile())
+	incomingRoutes.PUT("/api/v1/profile/:id", handler.UpdateProfile())
+}
+
 func GamesRoutes(incomingRoutes *gin.Engine, handler *controllers.Application) {
 	incomingRoutes.POST("/api/v1/game", handler.InsertGame())
 	incomingRoutes.GET("/api/v1/games", handler.ListGames())
-	incomingRoutes.GET("/api/v1/game/:id", handler.DeleteGame())
+	incomingRoutes.DELETE("/api/v1/game/:id", handler.DeleteGame())
 }
 
 func LeaderBoardsRoutes(incomingRoutes *gin.Engine, handler *controllers.Application) {

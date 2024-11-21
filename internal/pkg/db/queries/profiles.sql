@@ -6,7 +6,11 @@ INSERT INTO profiles (
 )
 RETURNING id;
 
--- name: UpdateProfile :exec
+-- name: GetProfile :one
+SELECT * FROM profiles
+WHERE id = $1;
+
+-- name: UpdateProfile :one
 UPDATE profiles 
   set first_name = $2,
   last_name = $3,

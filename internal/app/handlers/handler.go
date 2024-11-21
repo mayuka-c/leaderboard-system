@@ -19,6 +19,14 @@ type IServiceHandler interface {
 	ListPlayers(ctx context.Context) (models.ListPlayer, error)
 	UpdatePlayer(ctx context.Context, input models.UpdatePlayer) (int64, error)
 	DeletePlayer(ctx context.Context, input models.DeletePlayer) error
+	// profile
+	CreateProfile(ctx context.Context, input models.CreateProfile) (map[string]int64, error)
+	GetPlayerProfile(ctx context.Context, player_id int64) (models.Profile, error)
+	UpdateProfile(ctx context.Context, input models.UpdateProfile) (models.Profile, error)
+	// games
+	InsertGame(ctx context.Context, input models.InsertGame) (map[string]int64, error)
+	ListGames(ctx context.Context) (models.ListGames, error)
+	DeleteGame(ctx context.Context, input models.DeleteGame) error
 }
 
 type service struct {

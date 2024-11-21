@@ -17,7 +17,7 @@ type ListPlayer struct {
 }
 
 type UpdatePlayer struct {
-	ID       int64 `json:"id"`
+	ID       int64
 	Password int64 `json:"password"`
 }
 

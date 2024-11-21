@@ -23,6 +23,7 @@ func main() {
 	router.Use(gin.Logger())
 
 	routes.PlayersRoutes(router, controllers.NewApplication())
+	routes.ProfileRoutes(router, controllers.NewApplication())
 	routes.GamesRoutes(router, controllers.NewApplication())
 	routes.LeaderBoardsRoutes(router, controllers.NewApplication())
 

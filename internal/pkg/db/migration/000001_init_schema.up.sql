@@ -17,7 +17,7 @@ CREATE TABLE "profiles" (
   "email" citext NOT NULL,
   "age" int NOT NULL,
   "gender" gender_t NOT NULL,
-  "player_id" bigint,
+  "player_id" bigint NOT NULL UNIQUE,
   "updated_at" timestamptz NOT NULL DEFAULT 'now()'
 
   CONSTRAINT proper_email CHECK(email ~ '^[\w]+\@\w{0,6}\.\w{2,4}$')
@@ -25,13 +25,13 @@ CREATE TABLE "profiles" (
 
 CREATE TABLE "games" (
   "id" bigserial PRIMARY KEY,
-  "name" varchar NOT NULL,
+  "name" varchar NOT NULL UNIQUE,
   "created_at" timestamptz NOT NULL
 );
 
 CREATE TABLE "leaderboards" (
-  "game_id" bigint,
-  "player_id" bigint,
+  "game_id" bigint NOT NULL,
+  "player_id" bigint NOT NULL,
   "score" bigint,
   "updated_at" timestamptz NOT NULL DEFAULT 'now()',
   PRIMARY KEY ("game_id", "player_id")

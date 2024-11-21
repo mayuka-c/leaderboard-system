@@ -29,7 +29,7 @@ func (h *service) ListPlayers(ctx context.Context) (models.ListPlayer, error) {
 
 	dbPlayers, err := h.dbQueries.ListPlayers(ctx)
 	if err != nil {
-		log.Fatalf("Failed to insert player record into DB. Err: %s", err.Error())
+		log.Fatalf("Failed to get player records from DB. Err: %s", err.Error())
 		return result, err
 	}
 

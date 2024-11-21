@@ -78,12 +78,12 @@ type Player struct {
 
 // Stores Players Profile details
 type Profile struct {
-	ID        int64         `json:"id"`
-	FirstName string        `json:"first_name"`
-	LastName  string        `json:"last_name"`
-	Email     string        `json:"email"`
-	Age       int32         `json:"age"`
-	Gender    GenderT       `json:"gender"`
-	PlayerID  sql.NullInt64 `json:"player_id"`
-	UpdatedAt time.Time     `json:"updated_at"`
+	ID        int64     `json:"id"`
+	FirstName string    `json:"first_name"`
+	LastName  string    `json:"last_name"`
+	Email     string    `json:"email"`
+	Age       int32     `json:"age"`
+	Gender    GenderT   `json:"gender"`
+	PlayerID  int64     `json:"player_id"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
