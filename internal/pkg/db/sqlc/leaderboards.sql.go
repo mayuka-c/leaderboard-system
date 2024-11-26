@@ -8,21 +8,23 @@ package db
 import (
 	"context"
 	"database/sql"
+	"time"
 )
 
 const getPlayersScoreByGame = `-- name: GetPlayersScoreByGame :many
-SELECT games.name, players.username, leaderboards.score
+SELECT games.name AS gameName, players.username as playerName, leaderboards.score, leaderboards.updated_at
 FROM leaderboards
 JOIN games ON games.id = leaderboards.game_id
 JOIN players ON players.id = leaderboards.player_id
 WHERE games.id = $1 
-ORDER BY players.username
+ORDER BY leaderboards.score DESC
 `
 
 type GetPlayersScoreByGameRow struct {
-	Name     string        `json:"name"`
-	Username string        `json:"username"`
-	Score    sql.NullInt64 `json:"score"`
+	Gamename   string        `json:"gamename"`
+	Playername string        `json:"playername"`
+	Score      sql.NullInt64 `json:"score"`
+	UpdatedAt  time.Time     `json:"updated_at"`
 }
 
 func (q *Queries) GetPlayersScoreByGame(ctx context.Context, id int64) ([]GetPlayersScoreByGameRow, error) {
@@ -34,7 +36,12 @@ func (q *Queries) GetPlayersScoreByGame(ctx context.Context, id int64) ([]GetPla
 	items := []GetPlayersScoreByGameRow{}
 	for rows.Next() {
 		var i GetPlayersScoreByGameRow
-		if err := rows.Scan(&i.Name, &i.Username, &i.Score); err != nil {
+		if err := rows.Scan(
+			&i.Gamename,
+			&i.Playername,
+			&i.Score,
+			&i.UpdatedAt,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

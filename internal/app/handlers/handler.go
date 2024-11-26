@@ -27,6 +27,9 @@ type IServiceHandler interface {
 	InsertGame(ctx context.Context, input models.InsertGame) (map[string]int64, error)
 	ListGames(ctx context.Context) (models.ListGames, error)
 	DeleteGame(ctx context.Context, input models.DeleteGame) error
+	//leaderboard
+	UpdateLeaderboard(ctx context.Context, input models.UpdateLeaderboard) (models.LeaderBoard, error)
+	GetPlayersScorebyGame(ctx context.Context, gameID int64) ([]models.LeaderBoard, error)
 }
 
 type service struct {

@@ -7,9 +7,9 @@ INSERT INTO leaderboards (
 RETURNING *;
 
 -- name: GetPlayersScoreByGame :many
-SELECT games.name, players.username, leaderboards.score
+SELECT games.name AS gameName, players.username as playerName, leaderboards.score, leaderboards.updated_at
 FROM leaderboards
 JOIN games ON games.id = leaderboards.game_id
 JOIN players ON players.id = leaderboards.player_id
 WHERE games.id = $1 
-ORDER BY players.username;
+ORDER BY leaderboards.score DESC;

@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"context"
-	"log"
 
 	"github.com/jinzhu/copier"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/mayuka-c/leaderboard-system-go/internal/app/models"
 	db "github.com/mayuka-c/leaderboard-system-go/internal/pkg/db/sqlc"
